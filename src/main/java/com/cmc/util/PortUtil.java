@@ -1,22 +1,16 @@
 package com.cmc.util;
 
-import com.cmc.CmcTestApplication;
 import com.cmc.domain.Coordinate;
 import com.cmc.domain.Port;
-import com.cmc.exception.DataLoadException;
-import com.cmc.services.PortService;
 import com.cmc.vo.PortVO;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.InputStream;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 public class PortUtil {
-    public static Port fromVO(PortVO portVO) {
+    public static Port fromVO(String key, PortVO portVO) {
         Port port = new Port();
+        port.setPortKey(key);
         updatePort(port, portVO);
         return port;
     }
@@ -62,22 +56,4 @@ public class PortUtil {
         });
     }
 
-    public static void loadPort(PortService portService) {
-        try {
-            //Read Json file
-            ObjectMapper mapper = new ObjectMapper();
-
-            InputStream jsonStream = CmcTestApplication.class.getResourceAsStream("/ports.json");
-            Map<String, PortVO> portVOMap = mapper.readValue(jsonStream, new TypeReference<Map<String, PortVO>>() {});
-
-            for(Map.Entry<String, PortVO> entry: portVOMap.entrySet()) {
-                PortVO portVO = entry.getValue();
-                Port port = PortUtil.fromVO(portVO);
-                portService.add(port);
-            }
-        } catch (Exception e) {
-            throw new DataLoadException("Error while loading data", e);
-        }
-
-    }
 }

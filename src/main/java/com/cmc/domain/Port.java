@@ -6,8 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.ArrayList;
-
 @Entity
 @Table(name = "tbl_port")
 @ToString
@@ -18,13 +16,9 @@ public class Port {
 
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private String portKey;
 
-    public long getId() {
-        return id;
-    }
-
+    @Column
     private String code;
 
     @Column
